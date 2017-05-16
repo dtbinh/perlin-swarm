@@ -1,0 +1,564 @@
+var _Zinggi$elm_webgl_math$Matrix4$makeOrtho = F6(
+	function (left, right, bottom, top, znear, zfar) {
+		var _p0 = {ctor: '_Tuple3', _0: right - left, _1: top - bottom, _2: zfar - znear};
+		var r_l = _p0._0;
+		var t_b = _p0._1;
+		var zf_zn = _p0._2;
+		return {
+			ctor: '_Tuple4',
+			_0: {ctor: '_Tuple4', _0: 2 / r_l, _1: 0, _2: 0, _3: (0 - (right + left)) / r_l},
+			_1: {ctor: '_Tuple4', _0: 0, _1: 2 / t_b, _2: 0, _3: (0 - (top + bottom)) / t_b},
+			_2: {ctor: '_Tuple4', _0: 0, _1: 0, _2: -2 / zf_zn, _3: (0 - (zfar + znear)) / zf_zn},
+			_3: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 0, _3: 1}
+		};
+	});
+var _Zinggi$elm_webgl_math$Matrix4$makeOrtho2d = F4(
+	function (left, right, bottom, top) {
+		return A6(_Zinggi$elm_webgl_math$Matrix4$makeOrtho, left, right, bottom, top, -1, 1);
+	});
+var _Zinggi$elm_webgl_math$Matrix4$makeFrustum = F6(
+	function (left, right, bottom, top, znear, zfar) {
+		var _p1 = {ctor: '_Tuple4', _0: right - left, _1: top - bottom, _2: zfar - znear, _3: 2 * znear};
+		var r_l = _p1._0;
+		var t_b = _p1._1;
+		var zf_zn = _p1._2;
+		var zn_2 = _p1._3;
+		return {
+			ctor: '_Tuple4',
+			_0: {ctor: '_Tuple4', _0: zn_2 / r_l, _1: 0, _2: (right + left) / r_l, _3: 0},
+			_1: {ctor: '_Tuple4', _0: 0, _1: zn_2 / t_b, _2: (top + bottom) / t_b, _3: 0},
+			_2: {ctor: '_Tuple4', _0: 0, _1: 0, _2: (0 - (zfar + znear)) / zf_zn, _3: ((0 - zn_2) * zfar) / zf_zn},
+			_3: {ctor: '_Tuple4', _0: 0, _1: 0, _2: -1, _3: 0}
+		};
+	});
+var _Zinggi$elm_webgl_math$Matrix4$makePerspective = F4(
+	function (fovy, aspect, znear, zfar) {
+		var ymax = znear * _elm_lang$core$Basics$tan((fovy * _elm_lang$core$Basics$pi) / 360.0);
+		var ymin = 0 - ymax;
+		var _p2 = {ctor: '_Tuple2', _0: ymin * aspect, _1: ymax * aspect};
+		var xmin = _p2._0;
+		var xmax = _p2._1;
+		return A6(_Zinggi$elm_webgl_math$Matrix4$makeFrustum, xmin, xmax, ymin, ymax, znear, zfar);
+	});
+var _Zinggi$elm_webgl_math$Matrix4$inverseRigidBodyTransform = function (_p3) {
+	var _p4 = _p3;
+	var _p16 = _p4._2._3;
+	var _p15 = _p4._1._3;
+	var _p14 = _p4._0._3;
+	var _p13 = _p4._2._2;
+	var _p12 = _p4._2._1;
+	var _p11 = _p4._2._0;
+	var _p10 = _p4._1._2;
+	var _p9 = _p4._1._1;
+	var _p8 = _p4._1._0;
+	var _p7 = _p4._0._2;
+	var _p6 = _p4._0._1;
+	var _p5 = _p4._0._0;
+	return {
+		ctor: '_Tuple4',
+		_0: {ctor: '_Tuple4', _0: _p5, _1: _p8, _2: _p11, _3: (((0 - _p5) * _p14) - (_p8 * _p15)) - (_p11 * _p16)},
+		_1: {ctor: '_Tuple4', _0: _p6, _1: _p9, _2: _p12, _3: (((0 - _p6) * _p14) - (_p9 * _p15)) - (_p12 * _p16)},
+		_2: {ctor: '_Tuple4', _0: _p7, _1: _p10, _2: _p13, _3: (((0 - _p7) * _p14) - (_p10 * _p15)) - (_p13 * _p16)},
+		_3: _p4._3
+	};
+};
+var _Zinggi$elm_webgl_math$Matrix4$mulAffine = F2(
+	function (_p18, _p17) {
+		var _p19 = _p18;
+		var _p41 = _p19._2._2;
+		var _p40 = _p19._2._1;
+		var _p39 = _p19._2._0;
+		var _p38 = _p19._1._2;
+		var _p37 = _p19._1._1;
+		var _p36 = _p19._1._0;
+		var _p35 = _p19._0._2;
+		var _p34 = _p19._0._1;
+		var _p33 = _p19._0._0;
+		var _p20 = _p17;
+		var _p32 = _p20._2._3;
+		var _p31 = _p20._2._2;
+		var _p30 = _p20._2._1;
+		var _p29 = _p20._2._0;
+		var _p28 = _p20._1._3;
+		var _p27 = _p20._1._2;
+		var _p26 = _p20._1._1;
+		var _p25 = _p20._1._0;
+		var _p24 = _p20._0._3;
+		var _p23 = _p20._0._2;
+		var _p22 = _p20._0._1;
+		var _p21 = _p20._0._0;
+		return {
+			ctor: '_Tuple4',
+			_0: {ctor: '_Tuple4', _0: ((_p33 * _p21) + (_p34 * _p25)) + (_p35 * _p29), _1: ((_p33 * _p22) + (_p34 * _p26)) + (_p35 * _p30), _2: ((_p33 * _p23) + (_p34 * _p27)) + (_p35 * _p31), _3: (((_p33 * _p24) + (_p34 * _p28)) + (_p35 * _p32)) + _p19._0._3},
+			_1: {ctor: '_Tuple4', _0: ((_p36 * _p21) + (_p37 * _p25)) + (_p38 * _p29), _1: ((_p36 * _p22) + (_p37 * _p26)) + (_p38 * _p30), _2: ((_p36 * _p23) + (_p37 * _p27)) + (_p38 * _p31), _3: (((_p36 * _p24) + (_p37 * _p28)) + (_p38 * _p32)) + _p19._1._3},
+			_2: {ctor: '_Tuple4', _0: ((_p39 * _p21) + (_p40 * _p25)) + (_p41 * _p29), _1: ((_p39 * _p22) + (_p40 * _p26)) + (_p41 * _p30), _2: ((_p39 * _p23) + (_p40 * _p27)) + (_p41 * _p31), _3: (((_p39 * _p24) + (_p40 * _p28)) + (_p41 * _p32)) + _p19._2._3},
+			_3: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 0, _3: 1}
+		};
+	});
+var _Zinggi$elm_webgl_math$Matrix4$transformAffine = F2(
+	function (_p43, _p42) {
+		var _p44 = _p43;
+		var _p45 = _p42;
+		var _p48 = _p45._2;
+		var _p47 = _p45._1;
+		var _p46 = _p45._0;
+		return {ctor: '_Tuple3', _0: (((_p44._0._0 * _p46) + (_p44._0._1 * _p47)) + (_p44._0._2 * _p48)) + _p44._0._3, _1: (((_p44._1._0 * _p46) + (_p44._1._1 * _p47)) + (_p44._1._2 * _p48)) + _p44._1._3, _2: (((_p44._2._0 * _p46) + (_p44._2._1 * _p47)) + (_p44._2._2 * _p48)) + _p44._2._3};
+	});
+var _Zinggi$elm_webgl_math$Matrix4$makeTransform = F5(
+	function (_p51, _p50, angle, axis, _p49) {
+		var _p52 = _p51;
+		var _p53 = _p50;
+		var _p68 = _p53._2;
+		var _p67 = _p53._1;
+		var _p66 = _p53._0;
+		var _p54 = _p49;
+		var _p65 = _p54._2;
+		var _p64 = _p54._1;
+		var _p63 = _p54._0;
+		var _p55 = _Zinggi$elm_webgl_math$Vector3$normalize(axis);
+		var rx = _p55._0;
+		var ry = _p55._1;
+		var rz = _p55._2;
+		var _p56 = {
+			ctor: '_Tuple2',
+			_0: _elm_lang$core$Basics$cos(angle),
+			_1: _elm_lang$core$Basics$sin(angle)
+		};
+		var c = _p56._0;
+		var s = _p56._1;
+		var c1 = 1 - c;
+		var _p57 = {ctor: '_Tuple2', _0: rx * c1, _1: ry * c1};
+		var rxc1 = _p57._0;
+		var ryc1 = _p57._1;
+		var _p58 = {ctor: '_Tuple3', _0: ry * rxc1, _1: rz * rxc1, _2: rz * ryc1};
+		var ryxc1 = _p58._0;
+		var rzxc1 = _p58._1;
+		var rzyc1 = _p58._2;
+		var _p59 = {ctor: '_Tuple3', _0: rx * s, _1: ry * s, _2: rz * s};
+		var rxs = _p59._0;
+		var rys = _p59._1;
+		var rzs = _p59._2;
+		var _p60 = {ctor: '_Tuple3', _0: _p66 * ((rx * rxc1) + c), _1: _p66 * (ryxc1 + rzs), _2: _p66 * (rzxc1 - rys)};
+		var new_x1 = _p60._0;
+		var new_x2 = _p60._1;
+		var new_x3 = _p60._2;
+		var _p61 = {ctor: '_Tuple3', _0: _p67 * (ryxc1 - rzs), _1: _p67 * ((ry * ryc1) + c), _2: _p67 * (rzyc1 + rxs)};
+		var new_y1 = _p61._0;
+		var new_y2 = _p61._1;
+		var new_y3 = _p61._2;
+		var _p62 = {ctor: '_Tuple3', _0: _p68 * (rzxc1 + rys), _1: _p68 * (rzyc1 - rxs), _2: _p68 * (((rz * rz) * c1) + c)};
+		var new_z1 = _p62._0;
+		var new_z2 = _p62._1;
+		var new_z3 = _p62._2;
+		return {
+			ctor: '_Tuple4',
+			_0: {ctor: '_Tuple4', _0: new_x1, _1: new_y1, _2: new_z1, _3: ((((0 - _p63) * new_x1) - (_p64 * new_y1)) - (_p65 * new_z1)) + _p52._0},
+			_1: {ctor: '_Tuple4', _0: new_x2, _1: new_y2, _2: new_z2, _3: ((((0 - _p63) * new_x2) - (_p64 * new_y2)) - (_p65 * new_z2)) + _p52._1},
+			_2: {ctor: '_Tuple4', _0: new_x3, _1: new_y3, _2: new_z3, _3: ((((0 - _p63) * new_x3) - (_p64 * new_y3)) - (_p65 * new_z3)) + _p52._2},
+			_3: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 0, _3: 1}
+		};
+	});
+var _Zinggi$elm_webgl_math$Matrix4$transformBy = F5(
+	function (translation, scale, angle, axis, pivot) {
+		return _Zinggi$elm_webgl_math$Matrix4$transformAffine(
+			A5(_Zinggi$elm_webgl_math$Matrix4$makeTransform, translation, scale, angle, axis, pivot));
+	});
+var _Zinggi$elm_webgl_math$Matrix4$makeLookAt = F3(
+	function (eye, target, up) {
+		var _p69 = _Zinggi$elm_webgl_math$Vector3$normalize(
+			A2(_Zinggi$elm_webgl_math$Vector3$sub, eye, target));
+		var z = _p69;
+		var z0 = _p69._0;
+		var z1 = _p69._1;
+		var z2 = _p69._2;
+		var _p70 = _Zinggi$elm_webgl_math$Vector3$normalize(
+			A2(_Zinggi$elm_webgl_math$Vector3$cross, up, z));
+		var x = _p70;
+		var x0 = _p70._0;
+		var x1 = _p70._1;
+		var x2 = _p70._2;
+		var _p71 = _Zinggi$elm_webgl_math$Vector3$normalize(
+			A2(_Zinggi$elm_webgl_math$Vector3$cross, z, x));
+		var y = _p71;
+		var y0 = _p71._0;
+		var y1 = _p71._1;
+		var y2 = _p71._2;
+		return {
+			ctor: '_Tuple4',
+			_0: {
+				ctor: '_Tuple4',
+				_0: x0,
+				_1: x1,
+				_2: x2,
+				_3: 0 - A2(_Zinggi$elm_webgl_math$Vector3$dot, x, eye)
+			},
+			_1: {
+				ctor: '_Tuple4',
+				_0: y0,
+				_1: y1,
+				_2: y2,
+				_3: 0 - A2(_Zinggi$elm_webgl_math$Vector3$dot, y, eye)
+			},
+			_2: {
+				ctor: '_Tuple4',
+				_0: z0,
+				_1: z1,
+				_2: z2,
+				_3: 0 - A2(_Zinggi$elm_webgl_math$Vector3$dot, z, eye)
+			},
+			_3: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 0, _3: 1}
+		};
+	});
+var _Zinggi$elm_webgl_math$Matrix4$makeBasis = F3(
+	function (_p74, _p73, _p72) {
+		var _p75 = _p74;
+		var _p76 = _p73;
+		var _p77 = _p72;
+		return {
+			ctor: '_Tuple4',
+			_0: {ctor: '_Tuple4', _0: _p75._0, _1: _p76._0, _2: _p77._0, _3: 0},
+			_1: {ctor: '_Tuple4', _0: _p75._1, _1: _p76._1, _2: _p77._1, _3: 0},
+			_2: {ctor: '_Tuple4', _0: _p75._2, _1: _p76._2, _2: _p77._2, _3: 0},
+			_3: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 0, _3: 1}
+		};
+	});
+var _Zinggi$elm_webgl_math$Matrix4$translate = F2(
+	function (_p79, _p78) {
+		var _p80 = _p79;
+		var _p93 = _p80._2;
+		var _p92 = _p80._1;
+		var _p91 = _p80._0;
+		var _p81 = _p78;
+		var _p90 = _p81._2._2;
+		var _p89 = _p81._2._1;
+		var _p88 = _p81._2._0;
+		var _p87 = _p81._1._2;
+		var _p86 = _p81._1._1;
+		var _p85 = _p81._1._0;
+		var _p84 = _p81._0._2;
+		var _p83 = _p81._0._1;
+		var _p82 = _p81._0._0;
+		return {
+			ctor: '_Tuple4',
+			_0: {ctor: '_Tuple4', _0: _p82, _1: _p83, _2: _p84, _3: (((_p82 * _p91) + (_p83 * _p92)) + (_p84 * _p93)) + _p81._0._3},
+			_1: {ctor: '_Tuple4', _0: _p85, _1: _p86, _2: _p87, _3: (((_p85 * _p91) + (_p86 * _p92)) + (_p87 * _p93)) + _p81._1._3},
+			_2: {ctor: '_Tuple4', _0: _p88, _1: _p89, _2: _p90, _3: (((_p88 * _p91) + (_p89 * _p92)) + (_p90 * _p93)) + _p81._2._3},
+			_3: _p81._3
+		};
+	});
+var _Zinggi$elm_webgl_math$Matrix4$makeTranslate = function (_p94) {
+	var _p95 = _p94;
+	return {
+		ctor: '_Tuple4',
+		_0: {ctor: '_Tuple4', _0: 1, _1: 0, _2: 0, _3: _p95._0},
+		_1: {ctor: '_Tuple4', _0: 0, _1: 1, _2: 0, _3: _p95._1},
+		_2: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 1, _3: _p95._2},
+		_3: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 0, _3: 1}
+	};
+};
+var _Zinggi$elm_webgl_math$Matrix4$scale = F2(
+	function (_p97, _p96) {
+		var _p98 = _p97;
+		var _p102 = _p98._2;
+		var _p101 = _p98._1;
+		var _p100 = _p98._0;
+		var _p99 = _p96;
+		return {
+			ctor: '_Tuple4',
+			_0: {ctor: '_Tuple4', _0: _p99._0._0 * _p100, _1: _p99._0._1 * _p101, _2: _p99._0._2 * _p102, _3: _p99._0._3},
+			_1: {ctor: '_Tuple4', _0: _p99._1._0 * _p100, _1: _p99._1._1 * _p101, _2: _p99._1._2 * _p102, _3: _p99._1._3},
+			_2: {ctor: '_Tuple4', _0: _p99._2._0 * _p100, _1: _p99._2._1 * _p101, _2: _p99._2._2 * _p102, _3: _p99._2._3},
+			_3: _p99._3
+		};
+	});
+var _Zinggi$elm_webgl_math$Matrix4$makeScale = function (_p103) {
+	var _p104 = _p103;
+	return {
+		ctor: '_Tuple4',
+		_0: {ctor: '_Tuple4', _0: _p104._0, _1: 0, _2: 0, _3: 0},
+		_1: {ctor: '_Tuple4', _0: 0, _1: _p104._1, _2: 0, _3: 0},
+		_2: {ctor: '_Tuple4', _0: 0, _1: 0, _2: _p104._2, _3: 0},
+		_3: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 0, _3: 1}
+	};
+};
+var _Zinggi$elm_webgl_math$Matrix4$rotate = F3(
+	function (angle, _p106, _p105) {
+		var _p107 = _p106;
+		var _p125 = _p107._2;
+		var _p124 = _p107._1;
+		var _p123 = _p107._0;
+		var _p108 = _p105;
+		var _p122 = _p108._2._2;
+		var _p121 = _p108._2._1;
+		var _p120 = _p108._2._0;
+		var _p119 = _p108._1._2;
+		var _p118 = _p108._1._1;
+		var _p117 = _p108._1._0;
+		var _p116 = _p108._0._2;
+		var _p115 = _p108._0._1;
+		var _p114 = _p108._0._0;
+		var _p109 = {
+			ctor: '_Tuple2',
+			_0: _elm_lang$core$Basics$cos(angle),
+			_1: _elm_lang$core$Basics$sin(angle)
+		};
+		var c = _p109._0;
+		var s = _p109._1;
+		var c1 = 1 - c;
+		var l_2 = ((_p123 * _p123) + (_p124 * _p124)) + (_p125 * _p125);
+		var _p110 = function () {
+			if (!_elm_lang$core$Native_Utils.eq(l_2, 1.0)) {
+				var l_1 = 1 / _elm_lang$core$Basics$sqrt(l_2);
+				return {ctor: '_Tuple3', _0: _p123 * l_1, _1: _p124 * l_1, _2: _p125 * l_1};
+			} else {
+				return {ctor: '_Tuple3', _0: _p123, _1: _p124, _2: _p125};
+			}
+		}();
+		var x = _p110._0;
+		var y = _p110._1;
+		var z = _p110._2;
+		var _p111 = {ctor: '_Tuple5', _0: z * s, _1: y * s, _2: x * s, _3: x * c1, _4: y * c1};
+		var zs = _p111._0;
+		var ys = _p111._1;
+		var xs = _p111._2;
+		var xc1 = _p111._3;
+		var yc1 = _p111._4;
+		var _p112 = {ctor: '_Tuple3', _0: y * xc1, _1: z * xc1, _2: z * yc1};
+		var xyc1 = _p112._0;
+		var xzc1 = _p112._1;
+		var yzc1 = _p112._2;
+		var _p113 = {
+			ctor: '_Tuple3',
+			_0: {ctor: '_Tuple3', _0: (x * xc1) + c, _1: xyc1 - zs, _2: xzc1 + ys},
+			_1: {ctor: '_Tuple3', _0: xyc1 + zs, _1: (y * yc1) + c, _2: yzc1 - xs},
+			_2: {ctor: '_Tuple3', _0: xzc1 - ys, _1: yzc1 + xs, _2: ((z * z) * c1) + c}
+		};
+		var t11 = _p113._0._0;
+		var t12 = _p113._0._1;
+		var t13 = _p113._0._2;
+		var t21 = _p113._1._0;
+		var t22 = _p113._1._1;
+		var t23 = _p113._1._2;
+		var t31 = _p113._2._0;
+		var t32 = _p113._2._1;
+		var t33 = _p113._2._2;
+		return {
+			ctor: '_Tuple4',
+			_0: {ctor: '_Tuple4', _0: ((t11 * _p114) + (t21 * _p115)) + (t31 * _p116), _1: ((t12 * _p114) + (t22 * _p115)) + (t32 * _p116), _2: ((t13 * _p114) + (t23 * _p115)) + (t33 * _p116), _3: _p108._0._3},
+			_1: {ctor: '_Tuple4', _0: ((t11 * _p117) + (t21 * _p118)) + (t31 * _p119), _1: ((t12 * _p117) + (t22 * _p118)) + (t32 * _p119), _2: ((t13 * _p117) + (t23 * _p118)) + (t33 * _p119), _3: _p108._1._3},
+			_2: {ctor: '_Tuple4', _0: ((t11 * _p120) + (t21 * _p121)) + (t31 * _p122), _1: ((t12 * _p120) + (t22 * _p121)) + (t32 * _p122), _2: ((t13 * _p120) + (t23 * _p121)) + (t33 * _p122), _3: _p108._2._3},
+			_3: _p108._3
+		};
+	});
+var _Zinggi$elm_webgl_math$Matrix4$makeRotate = F2(
+	function (angle, axis) {
+		var _p126 = {
+			ctor: '_Tuple2',
+			_0: _elm_lang$core$Basics$cos(angle),
+			_1: _elm_lang$core$Basics$sin(angle)
+		};
+		var c = _p126._0;
+		var s = _p126._1;
+		var c1 = 1 - c;
+		var _p127 = _Zinggi$elm_webgl_math$Vector3$normalize(axis);
+		var x = _p127._0;
+		var y = _p127._1;
+		var z = _p127._2;
+		var _p128 = {ctor: '_Tuple5', _0: z * s, _1: y * s, _2: x * s, _3: x * c1, _4: y * c1};
+		var zs = _p128._0;
+		var ys = _p128._1;
+		var xs = _p128._2;
+		var xc1 = _p128._3;
+		var yc1 = _p128._4;
+		var _p129 = {ctor: '_Tuple3', _0: y * xc1, _1: z * xc1, _2: z * yc1};
+		var xyc1 = _p129._0;
+		var xzc1 = _p129._1;
+		var yzc1 = _p129._2;
+		return {
+			ctor: '_Tuple4',
+			_0: {ctor: '_Tuple4', _0: (x * xc1) + c, _1: xyc1 - zs, _2: xzc1 + ys, _3: 0},
+			_1: {ctor: '_Tuple4', _0: xyc1 + zs, _1: (y * yc1) + c, _2: yzc1 - xs, _3: 0},
+			_2: {ctor: '_Tuple4', _0: xzc1 - ys, _1: yzc1 + xs, _2: ((z * z) * c1) + c, _3: 0},
+			_3: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 0, _3: 1}
+		};
+	});
+var _Zinggi$elm_webgl_math$Matrix4$transform = F2(
+	function (_p131, _p130) {
+		var _p132 = _p131;
+		var _p133 = _p130;
+		var _p137 = _p133._2;
+		var _p136 = _p133._1;
+		var _p135 = _p133._0;
+		var _p134 = {ctor: '_Tuple4', _0: (((_p132._0._0 * _p135) + (_p132._0._1 * _p136)) + (_p132._0._2 * _p137)) + _p132._0._3, _1: (((_p132._1._0 * _p135) + (_p132._1._1 * _p136)) + (_p132._1._2 * _p137)) + _p132._1._3, _2: (((_p132._2._0 * _p135) + (_p132._2._1 * _p136)) + (_p132._2._2 * _p137)) + _p132._2._3, _3: (((_p132._3._0 * _p135) + (_p132._3._1 * _p136)) + (_p132._3._2 * _p137)) + _p132._3._3};
+		var r0 = _p134._0;
+		var r1 = _p134._1;
+		var r2 = _p134._2;
+		var w = _p134._3;
+		return (!_elm_lang$core$Native_Utils.eq(w, 1.0)) ? {ctor: '_Tuple3', _0: r0 / w, _1: r1 / w, _2: r2 / w} : {ctor: '_Tuple3', _0: r0, _1: r1, _2: r2};
+	});
+var _Zinggi$elm_webgl_math$Matrix4$mulVector = F2(
+	function (_p138, v) {
+		var _p139 = _p138;
+		return {
+			ctor: '_Tuple4',
+			_0: A2(_Zinggi$elm_webgl_math$Vector4$dot, _p139._0, v),
+			_1: A2(_Zinggi$elm_webgl_math$Vector4$dot, _p139._1, v),
+			_2: A2(_Zinggi$elm_webgl_math$Vector4$dot, _p139._2, v),
+			_3: A2(_Zinggi$elm_webgl_math$Vector4$dot, _p139._3, v)
+		};
+	});
+var _Zinggi$elm_webgl_math$Matrix4$transpose = function (_p140) {
+	var _p141 = _p140;
+	return {
+		ctor: '_Tuple4',
+		_0: {ctor: '_Tuple4', _0: _p141._0._0, _1: _p141._1._0, _2: _p141._2._0, _3: _p141._3._0},
+		_1: {ctor: '_Tuple4', _0: _p141._0._1, _1: _p141._1._1, _2: _p141._2._1, _3: _p141._3._1},
+		_2: {ctor: '_Tuple4', _0: _p141._0._2, _1: _p141._1._2, _2: _p141._2._2, _3: _p141._3._2},
+		_3: {ctor: '_Tuple4', _0: _p141._0._3, _1: _p141._1._3, _2: _p141._2._3, _3: _p141._3._3}
+	};
+};
+var _Zinggi$elm_webgl_math$Matrix4$mul = F2(
+	function (_p143, _p142) {
+		var _p144 = _p143;
+		var _p177 = _p144._3._3;
+		var _p176 = _p144._3._2;
+		var _p175 = _p144._3._1;
+		var _p174 = _p144._3._0;
+		var _p173 = _p144._2._3;
+		var _p172 = _p144._2._2;
+		var _p171 = _p144._2._1;
+		var _p170 = _p144._2._0;
+		var _p169 = _p144._1._3;
+		var _p168 = _p144._1._2;
+		var _p167 = _p144._1._1;
+		var _p166 = _p144._1._0;
+		var _p165 = _p144._0._3;
+		var _p164 = _p144._0._2;
+		var _p163 = _p144._0._1;
+		var _p162 = _p144._0._0;
+		var _p145 = _p142;
+		var _p161 = _p145._3._3;
+		var _p160 = _p145._3._2;
+		var _p159 = _p145._3._1;
+		var _p158 = _p145._3._0;
+		var _p157 = _p145._2._3;
+		var _p156 = _p145._2._2;
+		var _p155 = _p145._2._1;
+		var _p154 = _p145._2._0;
+		var _p153 = _p145._1._3;
+		var _p152 = _p145._1._2;
+		var _p151 = _p145._1._1;
+		var _p150 = _p145._1._0;
+		var _p149 = _p145._0._3;
+		var _p148 = _p145._0._2;
+		var _p147 = _p145._0._1;
+		var _p146 = _p145._0._0;
+		return {
+			ctor: '_Tuple4',
+			_0: {ctor: '_Tuple4', _0: (((_p162 * _p146) + (_p163 * _p150)) + (_p164 * _p154)) + (_p165 * _p158), _1: (((_p162 * _p147) + (_p163 * _p151)) + (_p164 * _p155)) + (_p165 * _p159), _2: (((_p162 * _p148) + (_p163 * _p152)) + (_p164 * _p156)) + (_p165 * _p160), _3: (((_p162 * _p149) + (_p163 * _p153)) + (_p164 * _p157)) + (_p165 * _p161)},
+			_1: {ctor: '_Tuple4', _0: (((_p166 * _p146) + (_p167 * _p150)) + (_p168 * _p154)) + (_p169 * _p158), _1: (((_p166 * _p147) + (_p167 * _p151)) + (_p168 * _p155)) + (_p169 * _p159), _2: (((_p166 * _p148) + (_p167 * _p152)) + (_p168 * _p156)) + (_p169 * _p160), _3: (((_p166 * _p149) + (_p167 * _p153)) + (_p168 * _p157)) + (_p169 * _p161)},
+			_2: {ctor: '_Tuple4', _0: (((_p170 * _p146) + (_p171 * _p150)) + (_p172 * _p154)) + (_p173 * _p158), _1: (((_p170 * _p147) + (_p171 * _p151)) + (_p172 * _p155)) + (_p173 * _p159), _2: (((_p170 * _p148) + (_p171 * _p152)) + (_p172 * _p156)) + (_p173 * _p160), _3: (((_p170 * _p149) + (_p171 * _p153)) + (_p172 * _p157)) + (_p173 * _p161)},
+			_3: {ctor: '_Tuple4', _0: (((_p174 * _p146) + (_p175 * _p150)) + (_p176 * _p154)) + (_p177 * _p158), _1: (((_p174 * _p147) + (_p175 * _p151)) + (_p176 * _p155)) + (_p177 * _p159), _2: (((_p174 * _p148) + (_p175 * _p152)) + (_p176 * _p156)) + (_p177 * _p160), _3: (((_p174 * _p149) + (_p175 * _p153)) + (_p176 * _p157)) + (_p177 * _p161)}
+		};
+	});
+var _Zinggi$elm_webgl_math$Matrix4$mulByConst = F2(
+	function (a, _p178) {
+		var _p179 = _p178;
+		return {
+			ctor: '_Tuple4',
+			_0: A2(_Zinggi$elm_webgl_math$Vector4$scale, a, _p179._0),
+			_1: A2(_Zinggi$elm_webgl_math$Vector4$scale, a, _p179._1),
+			_2: A2(_Zinggi$elm_webgl_math$Vector4$scale, a, _p179._2),
+			_3: A2(_Zinggi$elm_webgl_math$Vector4$scale, a, _p179._3)
+		};
+	});
+var _Zinggi$elm_webgl_math$Matrix4$fromColumns = F4(
+	function (a, b, c, d) {
+		return _Zinggi$elm_webgl_math$Matrix4$transpose(
+			{ctor: '_Tuple4', _0: a, _1: b, _2: c, _3: d});
+	});
+var _Zinggi$elm_webgl_math$Matrix4$fromRows = F4(
+	function (a, b, c, d) {
+		return {ctor: '_Tuple4', _0: a, _1: b, _2: c, _3: d};
+	});
+var _Zinggi$elm_webgl_math$Matrix4$identity = {
+	ctor: '_Tuple4',
+	_0: {ctor: '_Tuple4', _0: 1, _1: 0, _2: 0, _3: 0},
+	_1: {ctor: '_Tuple4', _0: 0, _1: 1, _2: 0, _3: 0},
+	_2: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 1, _3: 0},
+	_3: {ctor: '_Tuple4', _0: 0, _1: 0, _2: 0, _3: 1}
+};
+var _Zinggi$elm_webgl_math$Matrix4$foldr = F3(
+	function (f, init, _p180) {
+		var _p181 = _p180;
+		return A3(
+			_Zinggi$elm_webgl_math$Vector4$foldr,
+			f,
+			A3(
+				_Zinggi$elm_webgl_math$Vector4$foldr,
+				f,
+				A3(
+					_Zinggi$elm_webgl_math$Vector4$foldr,
+					f,
+					A3(_Zinggi$elm_webgl_math$Vector4$foldr, f, init, _p181._3),
+					_p181._2),
+				_p181._1),
+			_p181._0);
+	});
+var _Zinggi$elm_webgl_math$Matrix4$foldl = F3(
+	function (f, init, _p182) {
+		var _p183 = _p182;
+		return A3(
+			_Zinggi$elm_webgl_math$Vector4$foldl,
+			f,
+			A3(
+				_Zinggi$elm_webgl_math$Vector4$foldl,
+				f,
+				A3(
+					_Zinggi$elm_webgl_math$Vector4$foldl,
+					f,
+					A3(_Zinggi$elm_webgl_math$Vector4$foldl, f, init, _p183._0),
+					_p183._1),
+				_p183._2),
+			_p183._3);
+	});
+var _Zinggi$elm_webgl_math$Matrix4$maxNorm = A2(
+	_Zinggi$elm_webgl_math$Matrix4$foldl,
+	F2(
+		function (elem, acc) {
+			return A2(
+				_elm_lang$core$Basics$max,
+				_elm_lang$core$Basics$abs(elem),
+				acc);
+		}),
+	0);
+var _Zinggi$elm_webgl_math$Matrix4$map2 = function (f) {
+	return _Zinggi$elm_webgl_math$Vector4$map2(
+		_Zinggi$elm_webgl_math$Vector4$map2(f));
+};
+var _Zinggi$elm_webgl_math$Matrix4$add = _Zinggi$elm_webgl_math$Matrix4$map2(
+	F2(
+		function (x, y) {
+			return x + y;
+		}));
+var _Zinggi$elm_webgl_math$Matrix4$sub = _Zinggi$elm_webgl_math$Matrix4$map2(
+	F2(
+		function (x, y) {
+			return x - y;
+		}));
+var _Zinggi$elm_webgl_math$Matrix4$almostEqual = F3(
+	function (eps, a, b) {
+		return _elm_lang$core$Native_Utils.cmp(
+			_Zinggi$elm_webgl_math$Matrix4$maxNorm(
+				A2(_Zinggi$elm_webgl_math$Matrix4$sub, a, b)),
+			eps) < 1;
+	});
+var _Zinggi$elm_webgl_math$Matrix4$elementWiseMul = _Zinggi$elm_webgl_math$Matrix4$map2(
+	F2(
+		function (x, y) {
+			return x * y;
+		}));
+var _Zinggi$elm_webgl_math$Matrix4$map = function (f) {
+	return _Zinggi$elm_webgl_math$Vector4$map(
+		_Zinggi$elm_webgl_math$Vector4$map(f));
+};

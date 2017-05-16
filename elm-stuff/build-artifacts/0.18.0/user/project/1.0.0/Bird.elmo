@@ -1,0 +1,211 @@
+var _user$project$Bird$rotateVector = F2(
+	function (_p0, angle) {
+		var _p1 = _p0;
+		var _p3 = _p1._1;
+		var _p2 = _p1._0;
+		var y = (_p2 * _elm_lang$core$Basics$sin(angle)) + (_p3 * _elm_lang$core$Basics$cos(angle));
+		var x = (_p2 * _elm_lang$core$Basics$cos(angle)) - (_p3 * _elm_lang$core$Basics$sin(angle));
+		return {ctor: '_Tuple2', _0: x, _1: y};
+	});
+var _user$project$Bird$half = function (x) {
+	return x / 2;
+};
+var _user$project$Bird$view = function (bird) {
+	var _p4 = bird.heading;
+	var headingX = _p4._0;
+	var headingY = _p4._1;
+	var _p5 = A2(
+		_Zinggi$elm_webgl_math$Vector3$cross,
+		{ctor: '_Tuple3', _0: 1, _1: 0, _2: 0},
+		{ctor: '_Tuple3', _0: headingX, _1: headingY, _2: 0});
+	var crossZ = _p5._2;
+	var angle = A2(
+		_Zinggi$elm_webgl_math$Vector2$angle,
+		{ctor: '_Tuple2', _0: 1, _1: 0},
+		bird.heading);
+	var rotateAngle = (_elm_lang$core$Native_Utils.cmp(crossZ, 0) > 0) ? angle : ((2 * _elm_lang$core$Basics$pi) - angle);
+	var _p6 = bird.position;
+	var x = _p6._0;
+	var y = _p6._1;
+	return {
+		ctor: '::',
+		_0: A2(
+			_evancz$elm_graphics$Collage$move,
+			{ctor: '_Tuple2', _0: x, _1: y},
+			A2(
+				_evancz$elm_graphics$Collage$rotate,
+				rotateAngle,
+				A2(
+					_evancz$elm_graphics$Collage$outlined,
+					_evancz$elm_graphics$Collage$defaultLine,
+					_evancz$elm_graphics$Collage$polygon(
+						{
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: -6, _1: -4},
+							_1: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 6, _1: 0},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: -6, _1: 4},
+									_1: {ctor: '[]'}
+								}
+							}
+						})))),
+		_1: {ctor: '[]'}
+	};
+};
+var _user$project$Bird$adjustToBoundary = F2(
+	function (scalar, boundary) {
+		return (_elm_lang$core$Native_Utils.cmp(
+			scalar,
+			_user$project$Bird$half(boundary)) > 0) ? (scalar - boundary) : ((_elm_lang$core$Native_Utils.cmp(
+			scalar,
+			0 - _user$project$Bird$half(boundary)) < 0) ? (scalar + boundary) : scalar);
+	});
+var _user$project$Bird$findClosestBird = F3(
+	function (closest, bird, birds) {
+		findClosestBird:
+		while (true) {
+			var _p7 = birds;
+			if (_p7.ctor === '[]') {
+				return _elm_lang$core$Maybe$Just(closest);
+			} else {
+				var _p9 = _p7._1;
+				var _p8 = _p7._0;
+				if ((_elm_lang$core$Native_Utils.cmp(
+					A2(_Zinggi$elm_webgl_math$Vector2$distance, bird.position, closest.position),
+					A2(_Zinggi$elm_webgl_math$Vector2$distance, bird.position, _p8.position)) > 0) && (_elm_lang$core$Native_Utils.cmp(
+					A2(
+						_Zinggi$elm_webgl_math$Vector2$angle,
+						bird.heading,
+						A2(_Zinggi$elm_webgl_math$Vector2$sub, _p8.position, bird.position)),
+					_elm_lang$core$Basics$degrees(45)) < 0)) {
+					var _v2 = _p8,
+						_v3 = bird,
+						_v4 = _p9;
+					closest = _v2;
+					bird = _v3;
+					birds = _v4;
+					continue findClosestBird;
+				} else {
+					var _v5 = closest,
+						_v6 = bird,
+						_v7 = _p9;
+					closest = _v5;
+					bird = _v6;
+					birds = _v7;
+					continue findClosestBird;
+				}
+			}
+		}
+	});
+var _user$project$Bird$findClosestLeader = F3(
+	function (closest, bird, birds) {
+		var _p10 = birds;
+		if (_p10.ctor === '[]') {
+			return _elm_lang$core$Maybe$Just(closest);
+		} else {
+			var _p12 = _p10._1;
+			var _p11 = _p10._0;
+			return ((_elm_lang$core$Native_Utils.cmp(
+				A2(_Zinggi$elm_webgl_math$Vector2$distance, bird.position, closest.position),
+				A2(_Zinggi$elm_webgl_math$Vector2$distance, bird.position, _p11.position)) > 0) && _p11.leader) ? A3(_user$project$Bird$findClosestBird, _p11, bird, _p12) : A3(_user$project$Bird$findClosestBird, closest, bird, _p12);
+		}
+	});
+var _user$project$Bird$update = F6(
+	function (time, width, height, ether, birds, bird) {
+		var currentSpeed = bird.leader ? (bird.speed + 5.0e-2) : bird.speed;
+		var filteredBirds = A2(
+			_elm_lang$core$List$filter,
+			function (b) {
+				return !_elm_lang$core$Native_Utils.eq(b, bird);
+			},
+			birds);
+		var leaders = A2(
+			_elm_lang$core$List$filter,
+			function (b) {
+				return b.leader;
+			},
+			filteredBirds);
+		var closestLeader = function () {
+			if (bird.leader) {
+				return _elm_lang$core$Maybe$Nothing;
+			} else {
+				var _p13 = _elm_lang$core$List$head(leaders);
+				if (_p13.ctor === 'Nothing') {
+					return _elm_lang$core$Maybe$Nothing;
+				} else {
+					return A3(_user$project$Bird$findClosestLeader, _p13._0, bird, leaders);
+				}
+			}
+		}();
+		var closestBird = function () {
+			var _p14 = _elm_lang$core$List$head(filteredBirds);
+			if (_p14.ctor === 'Nothing') {
+				return _elm_lang$core$Maybe$Nothing;
+			} else {
+				return A3(_user$project$Bird$findClosestBird, _p14._0, bird, filteredBirds);
+			}
+		}();
+		var newHeading = function () {
+			var _p15 = closestLeader;
+			if (_p15.ctor === 'Nothing') {
+				return A2(
+					_user$project$Bird$rotateVector,
+					{ctor: '_Tuple2', _0: 1, _1: 0},
+					(4 * _elm_lang$core$Basics$pi) * ether(
+						{
+							ctor: '_Tuple2',
+							_0: _Zinggi$elm_webgl_math$Vector2$getX(bird.position) / 4,
+							_1: _Zinggi$elm_webgl_math$Vector2$getY(bird.position) / 4
+						}));
+			} else {
+				var _p17 = _p15._0;
+				var _p16 = closestBird;
+				if (_p16.ctor === 'Nothing') {
+					return A2(_Zinggi$elm_webgl_math$Vector2$directionFromTo, bird.position, _p17.position);
+				} else {
+					return (_elm_lang$core$Native_Utils.cmp(
+						A2(_Zinggi$elm_webgl_math$Vector2$distance, bird.position, _p16._0.position),
+						30) > 0) ? A2(_Zinggi$elm_webgl_math$Vector2$directionFromTo, bird.position, _p17.position) : A2(_user$project$Bird$rotateVector, bird.heading, 0.8);
+				}
+			}
+		}();
+		var _p18 = A2(
+			_Zinggi$elm_webgl_math$Vector2$add,
+			bird.position,
+			A2(
+				_Zinggi$elm_webgl_math$Vector2$scale,
+				time,
+				A2(_Zinggi$elm_webgl_math$Vector2$scale, currentSpeed, newHeading)));
+		var x = _p18._0;
+		var y = _p18._1;
+		var adjustedPosition = {
+			ctor: '_Tuple2',
+			_0: A2(
+				_user$project$Bird$adjustToBoundary,
+				x,
+				_elm_lang$core$Basics$toFloat(width)),
+			_1: A2(
+				_user$project$Bird$adjustToBoundary,
+				y,
+				_elm_lang$core$Basics$toFloat(height))
+		};
+		return _elm_lang$core$Native_Utils.update(
+			bird,
+			{position: adjustedPosition, heading: newHeading});
+	});
+var _user$project$Bird$init = F3(
+	function (x, y, leading) {
+		return {
+			position: {ctor: '_Tuple2', _0: x, _1: y},
+			heading: {ctor: '_Tuple2', _0: 1, _1: 0},
+			speed: 0.1,
+			leader: leading
+		};
+	});
+var _user$project$Bird$Bird = F4(
+	function (a, b, c, d) {
+		return {position: a, heading: b, speed: c, leader: d};
+	});

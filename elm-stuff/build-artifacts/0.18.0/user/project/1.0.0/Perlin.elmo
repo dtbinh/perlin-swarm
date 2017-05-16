@@ -1,0 +1,111 @@
+var _user$project$Perlin$generateNSeeds = F2(
+	function (n, seed) {
+		var _p0 = A2(
+			_mgold$elm_random_pcg$Random_Pcg$step,
+			A2(_mgold$elm_random_pcg$Random_Pcg$list, n, _mgold$elm_random_pcg$Random_Pcg$independentSeed),
+			seed);
+		var xs = _p0._0;
+		return xs;
+	});
+var _user$project$Perlin$fade = function (t) {
+	return ((t * t) * t) * ((t * ((t * 6) - 15)) + 10);
+};
+var _user$project$Perlin$dot = F2(
+	function (_p2, _p1) {
+		var _p3 = _p2;
+		var _p4 = _p1;
+		return (_p3._0 * _p4._0) + (_p3._1 * _p4._1);
+	});
+var _user$project$Perlin$generateGradient = A2(
+	_mgold$elm_random_pcg$Random_Pcg$map,
+	function (theta) {
+		return _elm_lang$core$Basics$fromPolar(
+			{ctor: '_Tuple2', _0: 1, _1: theta});
+	},
+	A2(_mgold$elm_random_pcg$Random_Pcg$float, 0, 2 * _elm_lang$core$Basics$pi));
+var _user$project$Perlin$spiral = function (_p5) {
+	var _p6 = _p5;
+	var _p7 = _p6._0;
+	var d = _p7 + _p6._1;
+	return (((d * (d + 1)) / 2) | 0) + _p7;
+};
+var _user$project$Perlin$lookup = F2(
+	function (seed, pos) {
+		var seed1 = A2(
+			_mgold$elm_random_pcg$Random_Pcg$fastForward,
+			_user$project$Perlin$spiral(pos),
+			seed);
+		return _elm_lang$core$Tuple$first(
+			A2(_mgold$elm_random_pcg$Random_Pcg$step, _user$project$Perlin$generateGradient, seed1));
+	});
+var _user$project$Perlin$noise = F2(
+	function (seed, _p8) {
+		var _p9 = _p8;
+		var _p11 = _p9._1;
+		var _p10 = _p9._0;
+		var gxx = _elm_lang$core$Basics$curry(
+			_user$project$Perlin$lookup(seed));
+		var yi = _elm_lang$core$Basics$floor(_p11);
+		var yf = _p11 - _elm_lang$core$Basics$toFloat(yi);
+		var fadeY = _user$project$Perlin$fade(yf);
+		var xi = _elm_lang$core$Basics$floor(_p10);
+		var xf = _p10 - _elm_lang$core$Basics$toFloat(xi);
+		var fadeX = _user$project$Perlin$fade(xf);
+		var gbl = A2(gxx, xi, yi);
+		var dbl = A2(
+			_user$project$Perlin$dot,
+			gbl,
+			{ctor: '_Tuple2', _0: xf, _1: yf});
+		var gbr = A2(gxx, xi + 1, yi);
+		var dbr = A2(
+			_user$project$Perlin$dot,
+			gbr,
+			{ctor: '_Tuple2', _0: xf - 1, _1: yf});
+		var nx1 = (dbl * (1 - fadeX)) + (dbr * fadeX);
+		var gtl = A2(gxx, xi, yi + 1);
+		var dtl = A2(
+			_user$project$Perlin$dot,
+			gtl,
+			{ctor: '_Tuple2', _0: xf, _1: yf - 1});
+		var gtr = A2(gxx, xi + 1, yi + 1);
+		var dtr = A2(
+			_user$project$Perlin$dot,
+			gtr,
+			{ctor: '_Tuple2', _0: xf - 1, _1: yf - 1});
+		var nx2 = (dtl * (1 - fadeX)) + (dtr * fadeX);
+		return ((nx1 * (1 - fadeY)) + (nx2 * fadeY)) + 0.4;
+	});
+var _user$project$Perlin$octaves = F2(
+	function (n, seed) {
+		var octave = F3(
+			function (m, seed, _p12) {
+				var _p13 = _p12;
+				return A2(
+					_user$project$Perlin$noise,
+					seed,
+					{ctor: '_Tuple2', _0: _p13._0 / m, _1: _p13._1 / m}) * m;
+			});
+		var multipliers = A2(
+			_elm_lang$core$List$map,
+			function (m) {
+				return Math.pow(2, m);
+			},
+			A2(
+				_elm_lang$core$List$map,
+				function (x) {
+					return _elm_lang$core$Basics$toFloat(x);
+				},
+				A2(_elm_lang$core$List$range, 0, n)));
+		var normalizer = _elm_lang$core$List$sum(multipliers);
+		var seeds = A2(_user$project$Perlin$generateNSeeds, n, seed);
+		var noiseFuncs = A3(_elm_lang$core$List$map2, octave, multipliers, seeds);
+		return function (pos) {
+			return _elm_lang$core$List$sum(
+				A2(
+					_elm_lang$core$List$map,
+					function (f) {
+						return f(pos);
+					},
+					noiseFuncs)) / normalizer;
+		};
+	});

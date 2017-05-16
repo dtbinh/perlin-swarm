@@ -1,0 +1,89 @@
+var _Zinggi$elm_webgl_math$Matrix3$mulVector = F2(
+	function (_p0, v) {
+		var _p1 = _p0;
+		return {
+			ctor: '_Tuple3',
+			_0: A2(_Zinggi$elm_webgl_math$Vector3$dot, _p1._0, v),
+			_1: A2(_Zinggi$elm_webgl_math$Vector3$dot, _p1._1, v),
+			_2: A2(_Zinggi$elm_webgl_math$Vector3$dot, _p1._2, v)
+		};
+	});
+var _Zinggi$elm_webgl_math$Matrix3$transform = F2(
+	function (m, _p2) {
+		var _p3 = _p2;
+		var _p4 = A2(
+			_Zinggi$elm_webgl_math$Matrix3$mulVector,
+			m,
+			{ctor: '_Tuple3', _0: _p3._0, _1: _p3._1, _2: 1});
+		var u = _p4._0;
+		var v = _p4._1;
+		var w = _p4._2;
+		return {ctor: '_Tuple2', _0: u / w, _1: v / w};
+	});
+var _Zinggi$elm_webgl_math$Matrix3$transpose = function (_p5) {
+	var _p6 = _p5;
+	return {
+		ctor: '_Tuple3',
+		_0: {ctor: '_Tuple3', _0: _p6._0._0, _1: _p6._1._0, _2: _p6._2._0},
+		_1: {ctor: '_Tuple3', _0: _p6._0._1, _1: _p6._1._1, _2: _p6._2._1},
+		_2: {ctor: '_Tuple3', _0: _p6._0._2, _1: _p6._1._2, _2: _p6._2._2}
+	};
+};
+var _Zinggi$elm_webgl_math$Matrix3$mul = F2(
+	function (_p8, _p7) {
+		var _p9 = _p8;
+		var _p28 = _p9._2._2;
+		var _p27 = _p9._2._1;
+		var _p26 = _p9._2._0;
+		var _p25 = _p9._1._2;
+		var _p24 = _p9._1._1;
+		var _p23 = _p9._1._0;
+		var _p22 = _p9._0._2;
+		var _p21 = _p9._0._1;
+		var _p20 = _p9._0._0;
+		var _p10 = _p7;
+		var _p19 = _p10._2._2;
+		var _p18 = _p10._2._1;
+		var _p17 = _p10._2._0;
+		var _p16 = _p10._1._2;
+		var _p15 = _p10._1._1;
+		var _p14 = _p10._1._0;
+		var _p13 = _p10._0._2;
+		var _p12 = _p10._0._1;
+		var _p11 = _p10._0._0;
+		return {
+			ctor: '_Tuple3',
+			_0: {ctor: '_Tuple3', _0: ((_p20 * _p11) + (_p21 * _p14)) + (_p22 * _p17), _1: ((_p20 * _p12) + (_p21 * _p15)) + (_p22 * _p18), _2: ((_p20 * _p13) + (_p21 * _p16)) + (_p22 * _p19)},
+			_1: {ctor: '_Tuple3', _0: ((_p23 * _p11) + (_p24 * _p14)) + (_p25 * _p17), _1: ((_p23 * _p12) + (_p24 * _p15)) + (_p25 * _p18), _2: ((_p23 * _p13) + (_p24 * _p16)) + (_p25 * _p19)},
+			_2: {ctor: '_Tuple3', _0: ((_p26 * _p11) + (_p27 * _p14)) + (_p28 * _p17), _1: ((_p26 * _p12) + (_p27 * _p15)) + (_p28 * _p18), _2: ((_p26 * _p13) + (_p27 * _p16)) + (_p28 * _p19)}
+		};
+	});
+var _Zinggi$elm_webgl_math$Matrix3$map2 = function (f) {
+	return _Zinggi$elm_webgl_math$Vector3$map2(
+		_Zinggi$elm_webgl_math$Vector3$map2(f));
+};
+var _Zinggi$elm_webgl_math$Matrix3$add = _Zinggi$elm_webgl_math$Matrix3$map2(
+	F2(
+		function (x, y) {
+			return x + y;
+		}));
+var _Zinggi$elm_webgl_math$Matrix3$sub = _Zinggi$elm_webgl_math$Matrix3$map2(
+	F2(
+		function (x, y) {
+			return x - y;
+		}));
+var _Zinggi$elm_webgl_math$Matrix3$elementWiseMul = _Zinggi$elm_webgl_math$Matrix3$map2(
+	F2(
+		function (x, y) {
+			return x * y;
+		}));
+var _Zinggi$elm_webgl_math$Matrix3$map = function (f) {
+	return _Zinggi$elm_webgl_math$Vector3$map(
+		_Zinggi$elm_webgl_math$Vector3$map(f));
+};
+var _Zinggi$elm_webgl_math$Matrix3$identity = {
+	ctor: '_Tuple3',
+	_0: {ctor: '_Tuple3', _0: 1, _1: 0, _2: 0},
+	_1: {ctor: '_Tuple3', _0: 0, _1: 1, _2: 0},
+	_2: {ctor: '_Tuple3', _0: 0, _1: 0, _2: 1}
+};
