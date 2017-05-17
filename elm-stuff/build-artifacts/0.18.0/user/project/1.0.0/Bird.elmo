@@ -27,7 +27,7 @@ var _user$project$Bird$view = function (bird) {
 	var _p6 = bird.position;
 	var x = _p6._0;
 	var y = _p6._1;
-	return {
+	return bird.leader ? {ctor: '[]'} : {
 		ctor: '::',
 		_0: A2(
 			_evancz$elm_graphics$Collage$move,

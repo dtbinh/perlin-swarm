@@ -101,7 +101,7 @@ update msg model =
                         Cmd.none
 
                 newBird =
-                    Bird.init (toFloat x) (toFloat y) (List.length model.birds >= 96)
+                    Bird.init (toFloat x) (toFloat y) (List.length model.birds >= 99)
             in
                 ( { model | birds = (newBird :: model.birds) }, newCmd )
 

@@ -81,7 +81,7 @@ var _user$project$Main$update = F2(
 					_elm_lang$core$Basics$toFloat(_p0._0._1),
 					_elm_lang$core$Native_Utils.cmp(
 						_elm_lang$core$List$length(model.birds),
-						96) > -1);
+						99) > -1);
 				var newCmd = (_elm_lang$core$Native_Utils.cmp(
 					_elm_lang$core$List$length(model.birds),
 					100) < 0) ? _user$project$Main$generateBirds(model) : _elm_lang$core$Platform_Cmd$none;

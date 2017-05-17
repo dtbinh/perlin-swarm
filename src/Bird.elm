@@ -168,12 +168,16 @@ view bird =
                 2 * pi - angle
 
     in
-        [ (polygon [ ( -6, -4 ), ( 6, 0 ), ( -6, 4 ) ])
-        -- [ (circle 12)
-            |> outlined defaultLine
-            |> rotate rotateAngle
-            |> move ( x, y )
-        ]
+        if bird.leader
+        then
+            []
+        else
+            [ (polygon [ ( -6, -4 ), ( 6, 0 ), ( -6, 4 ) ])
+            -- [ (circle 12)
+                |> outlined defaultLine
+                |> rotate rotateAngle
+                |> move ( x, y )
+            ]
 
 
 half : Float -> Float
