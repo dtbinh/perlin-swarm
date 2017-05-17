@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html><head><meta charset="UTF-8"><title>Perlin Swarm by Hibiscuslabs</title><style>html,head,body { padding:0; margin:0; }
+<html><head><meta charset="UTF-8"><title>Main</title><style>html,head,body { padding:0; margin:0; }
 body { font-family: calibri, helvetica, arial, sans-serif; }</style><script type="text/javascript">
 (function() {
 'use strict';
@@ -12708,7 +12708,7 @@ var _mgold$elm_random_pcg$Random_Pcg$fromJson = _elm_lang$core$Json_Decode$oneOf
 			_1: {ctor: '[]'}
 		}
 	});
-var _user$project$Perlin$generateNSeeds = F2(
+var _hibiscuslabs$perlin_swarm$Perlin$generateNSeeds = F2(
 	function (n, seed) {
 		var _p0 = A2(
 			_mgold$elm_random_pcg$Random_Pcg$step,
@@ -12717,81 +12717,81 @@ var _user$project$Perlin$generateNSeeds = F2(
 		var xs = _p0._0;
 		return xs;
 	});
-var _user$project$Perlin$fade = function (t) {
+var _hibiscuslabs$perlin_swarm$Perlin$fade = function (t) {
 	return ((t * t) * t) * ((t * ((t * 6) - 15)) + 10);
 };
-var _user$project$Perlin$dot = F2(
+var _hibiscuslabs$perlin_swarm$Perlin$dot = F2(
 	function (_p2, _p1) {
 		var _p3 = _p2;
 		var _p4 = _p1;
 		return (_p3._0 * _p4._0) + (_p3._1 * _p4._1);
 	});
-var _user$project$Perlin$generateGradient = A2(
+var _hibiscuslabs$perlin_swarm$Perlin$generateGradient = A2(
 	_mgold$elm_random_pcg$Random_Pcg$map,
 	function (theta) {
 		return _elm_lang$core$Basics$fromPolar(
 			{ctor: '_Tuple2', _0: 1, _1: theta});
 	},
 	A2(_mgold$elm_random_pcg$Random_Pcg$float, 0, 2 * _elm_lang$core$Basics$pi));
-var _user$project$Perlin$spiral = function (_p5) {
+var _hibiscuslabs$perlin_swarm$Perlin$spiral = function (_p5) {
 	var _p6 = _p5;
 	var _p7 = _p6._0;
 	var d = _p7 + _p6._1;
 	return (((d * (d + 1)) / 2) | 0) + _p7;
 };
-var _user$project$Perlin$lookup = F2(
+var _hibiscuslabs$perlin_swarm$Perlin$lookup = F2(
 	function (seed, pos) {
 		var seed1 = A2(
 			_mgold$elm_random_pcg$Random_Pcg$fastForward,
-			_user$project$Perlin$spiral(pos),
+			_hibiscuslabs$perlin_swarm$Perlin$spiral(pos),
 			seed);
 		return _elm_lang$core$Tuple$first(
-			A2(_mgold$elm_random_pcg$Random_Pcg$step, _user$project$Perlin$generateGradient, seed1));
+			A2(_mgold$elm_random_pcg$Random_Pcg$step, _hibiscuslabs$perlin_swarm$Perlin$generateGradient, seed1));
 	});
-var _user$project$Perlin$noise = F2(
+var _hibiscuslabs$perlin_swarm$Perlin$noise = F2(
 	function (seed, _p8) {
 		var _p9 = _p8;
 		var _p11 = _p9._1;
 		var _p10 = _p9._0;
 		var gxx = _elm_lang$core$Basics$curry(
-			_user$project$Perlin$lookup(seed));
+			_hibiscuslabs$perlin_swarm$Perlin$lookup(seed));
 		var yi = _elm_lang$core$Basics$floor(_p11);
 		var yf = _p11 - _elm_lang$core$Basics$toFloat(yi);
-		var fadeY = _user$project$Perlin$fade(yf);
+		var fadeY = _hibiscuslabs$perlin_swarm$Perlin$fade(yf);
 		var xi = _elm_lang$core$Basics$floor(_p10);
 		var xf = _p10 - _elm_lang$core$Basics$toFloat(xi);
-		var fadeX = _user$project$Perlin$fade(xf);
+		var fadeX = _hibiscuslabs$perlin_swarm$Perlin$fade(xf);
 		var gbl = A2(gxx, xi, yi);
 		var dbl = A2(
-			_user$project$Perlin$dot,
+			_hibiscuslabs$perlin_swarm$Perlin$dot,
 			gbl,
 			{ctor: '_Tuple2', _0: xf, _1: yf});
 		var gbr = A2(gxx, xi + 1, yi);
 		var dbr = A2(
-			_user$project$Perlin$dot,
+			_hibiscuslabs$perlin_swarm$Perlin$dot,
 			gbr,
 			{ctor: '_Tuple2', _0: xf - 1, _1: yf});
 		var nx1 = (dbl * (1 - fadeX)) + (dbr * fadeX);
 		var gtl = A2(gxx, xi, yi + 1);
 		var dtl = A2(
-			_user$project$Perlin$dot,
+			_hibiscuslabs$perlin_swarm$Perlin$dot,
 			gtl,
 			{ctor: '_Tuple2', _0: xf, _1: yf - 1});
 		var gtr = A2(gxx, xi + 1, yi + 1);
 		var dtr = A2(
-			_user$project$Perlin$dot,
+			_hibiscuslabs$perlin_swarm$Perlin$dot,
 			gtr,
 			{ctor: '_Tuple2', _0: xf - 1, _1: yf - 1});
 		var nx2 = (dtl * (1 - fadeX)) + (dtr * fadeX);
 		return ((nx1 * (1 - fadeY)) + (nx2 * fadeY)) + 0.4;
 	});
-var _user$project$Perlin$octaves = F2(
+var _hibiscuslabs$perlin_swarm$Perlin$octaves = F2(
 	function (n, seed) {
 		var octave = F3(
 			function (m, seed, _p12) {
 				var _p13 = _p12;
 				return A2(
-					_user$project$Perlin$noise,
+					_hibiscuslabs$perlin_swarm$Perlin$noise,
 					seed,
 					{ctor: '_Tuple2', _0: _p13._0 / m, _1: _p13._1 / m}) * m;
 			});
@@ -12807,7 +12807,7 @@ var _user$project$Perlin$octaves = F2(
 				},
 				A2(_elm_lang$core$List$range, 0, n)));
 		var normalizer = _elm_lang$core$List$sum(multipliers);
-		var seeds = A2(_user$project$Perlin$generateNSeeds, n, seed);
+		var seeds = A2(_hibiscuslabs$perlin_swarm$Perlin$generateNSeeds, n, seed);
 		var noiseFuncs = A3(_elm_lang$core$List$map2, octave, multipliers, seeds);
 		return function (pos) {
 			return _elm_lang$core$List$sum(
@@ -12819,7 +12819,7 @@ var _user$project$Perlin$octaves = F2(
 					noiseFuncs)) / normalizer;
 		};
 	});
-var _user$project$Bird$rotateVector = F2(
+var _hibiscuslabs$perlin_swarm$Bird$rotateVector = F2(
 	function (_p0, angle) {
 		var _p1 = _p0;
 		var _p3 = _p1._1;
@@ -12828,10 +12828,10 @@ var _user$project$Bird$rotateVector = F2(
 		var x = (_p2 * _elm_lang$core$Basics$cos(angle)) - (_p3 * _elm_lang$core$Basics$sin(angle));
 		return {ctor: '_Tuple2', _0: x, _1: y};
 	});
-var _user$project$Bird$half = function (x) {
+var _hibiscuslabs$perlin_swarm$Bird$half = function (x) {
 	return x / 2;
 };
-var _user$project$Bird$view = function (bird) {
+var _hibiscuslabs$perlin_swarm$Bird$view = function (bird) {
 	var _p4 = bird.heading;
 	var headingX = _p4._0;
 	var headingY = _p4._1;
@@ -12848,7 +12848,7 @@ var _user$project$Bird$view = function (bird) {
 	var _p6 = bird.position;
 	var x = _p6._0;
 	var y = _p6._1;
-	return {
+	return bird.leader ? {ctor: '[]'} : {
 		ctor: '::',
 		_0: A2(
 			_evancz$elm_graphics$Collage$move,
@@ -12876,15 +12876,15 @@ var _user$project$Bird$view = function (bird) {
 		_1: {ctor: '[]'}
 	};
 };
-var _user$project$Bird$adjustToBoundary = F2(
+var _hibiscuslabs$perlin_swarm$Bird$adjustToBoundary = F2(
 	function (scalar, boundary) {
 		return (_elm_lang$core$Native_Utils.cmp(
 			scalar,
-			_user$project$Bird$half(boundary)) > 0) ? (scalar - boundary) : ((_elm_lang$core$Native_Utils.cmp(
+			_hibiscuslabs$perlin_swarm$Bird$half(boundary)) > 0) ? (scalar - boundary) : ((_elm_lang$core$Native_Utils.cmp(
 			scalar,
-			0 - _user$project$Bird$half(boundary)) < 0) ? (scalar + boundary) : scalar);
+			0 - _hibiscuslabs$perlin_swarm$Bird$half(boundary)) < 0) ? (scalar + boundary) : scalar);
 	});
-var _user$project$Bird$findClosestBird = F3(
+var _hibiscuslabs$perlin_swarm$Bird$findClosestBird = F3(
 	function (closest, bird, birds) {
 		findClosestBird:
 		while (true) {
@@ -12921,7 +12921,7 @@ var _user$project$Bird$findClosestBird = F3(
 			}
 		}
 	});
-var _user$project$Bird$findClosestLeader = F3(
+var _hibiscuslabs$perlin_swarm$Bird$findClosestLeader = F3(
 	function (closest, bird, birds) {
 		var _p10 = birds;
 		if (_p10.ctor === '[]') {
@@ -12931,10 +12931,10 @@ var _user$project$Bird$findClosestLeader = F3(
 			var _p11 = _p10._0;
 			return ((_elm_lang$core$Native_Utils.cmp(
 				A2(_Zinggi$elm_webgl_math$Vector2$distance, bird.position, closest.position),
-				A2(_Zinggi$elm_webgl_math$Vector2$distance, bird.position, _p11.position)) > 0) && _p11.leader) ? A3(_user$project$Bird$findClosestBird, _p11, bird, _p12) : A3(_user$project$Bird$findClosestBird, closest, bird, _p12);
+				A2(_Zinggi$elm_webgl_math$Vector2$distance, bird.position, _p11.position)) > 0) && _p11.leader) ? A3(_hibiscuslabs$perlin_swarm$Bird$findClosestBird, _p11, bird, _p12) : A3(_hibiscuslabs$perlin_swarm$Bird$findClosestBird, closest, bird, _p12);
 		}
 	});
-var _user$project$Bird$update = F6(
+var _hibiscuslabs$perlin_swarm$Bird$update = F6(
 	function (time, width, height, ether, birds, bird) {
 		var currentSpeed = bird.leader ? (bird.speed + 5.0e-2) : bird.speed;
 		var filteredBirds = A2(
@@ -12957,7 +12957,7 @@ var _user$project$Bird$update = F6(
 				if (_p13.ctor === 'Nothing') {
 					return _elm_lang$core$Maybe$Nothing;
 				} else {
-					return A3(_user$project$Bird$findClosestLeader, _p13._0, bird, leaders);
+					return A3(_hibiscuslabs$perlin_swarm$Bird$findClosestLeader, _p13._0, bird, leaders);
 				}
 			}
 		}();
@@ -12966,14 +12966,14 @@ var _user$project$Bird$update = F6(
 			if (_p14.ctor === 'Nothing') {
 				return _elm_lang$core$Maybe$Nothing;
 			} else {
-				return A3(_user$project$Bird$findClosestBird, _p14._0, bird, filteredBirds);
+				return A3(_hibiscuslabs$perlin_swarm$Bird$findClosestBird, _p14._0, bird, filteredBirds);
 			}
 		}();
 		var newHeading = function () {
 			var _p15 = closestLeader;
 			if (_p15.ctor === 'Nothing') {
 				return A2(
-					_user$project$Bird$rotateVector,
+					_hibiscuslabs$perlin_swarm$Bird$rotateVector,
 					{ctor: '_Tuple2', _0: 1, _1: 0},
 					(4 * _elm_lang$core$Basics$pi) * ether(
 						{
@@ -12989,7 +12989,7 @@ var _user$project$Bird$update = F6(
 				} else {
 					return (_elm_lang$core$Native_Utils.cmp(
 						A2(_Zinggi$elm_webgl_math$Vector2$distance, bird.position, _p16._0.position),
-						30) > 0) ? A2(_Zinggi$elm_webgl_math$Vector2$directionFromTo, bird.position, _p17.position) : A2(_user$project$Bird$rotateVector, bird.heading, 0.8);
+						30) > 0) ? A2(_Zinggi$elm_webgl_math$Vector2$directionFromTo, bird.position, _p17.position) : A2(_hibiscuslabs$perlin_swarm$Bird$rotateVector, bird.heading, 0.8);
 				}
 			}
 		}();
@@ -13005,11 +13005,11 @@ var _user$project$Bird$update = F6(
 		var adjustedPosition = {
 			ctor: '_Tuple2',
 			_0: A2(
-				_user$project$Bird$adjustToBoundary,
+				_hibiscuslabs$perlin_swarm$Bird$adjustToBoundary,
 				x,
 				_elm_lang$core$Basics$toFloat(width)),
 			_1: A2(
-				_user$project$Bird$adjustToBoundary,
+				_hibiscuslabs$perlin_swarm$Bird$adjustToBoundary,
 				y,
 				_elm_lang$core$Basics$toFloat(height))
 		};
@@ -13017,7 +13017,7 @@ var _user$project$Bird$update = F6(
 			bird,
 			{position: adjustedPosition, heading: newHeading});
 	});
-var _user$project$Bird$init = F3(
+var _hibiscuslabs$perlin_swarm$Bird$init = F3(
 	function (x, y, leading) {
 		return {
 			position: {ctor: '_Tuple2', _0: x, _1: y},
@@ -13026,11 +13026,11 @@ var _user$project$Bird$init = F3(
 			leader: leading
 		};
 	});
-var _user$project$Bird$Bird = F4(
+var _hibiscuslabs$perlin_swarm$Bird$Bird = F4(
 	function (a, b, c, d) {
 		return {position: a, heading: b, speed: c, leader: d};
 	});
-var _user$project$Main$view = function (model) {
+var _hibiscuslabs$perlin_swarm$Main$view = function (model) {
 	return _evancz$elm_graphics$Element$toHtml(
 		A4(
 			_evancz$elm_graphics$Element$container,
@@ -13041,55 +13041,55 @@ var _user$project$Main$view = function (model) {
 				_evancz$elm_graphics$Collage$collage,
 				model.width,
 				model.height,
-				A2(_elm_lang$core$List$concatMap, _user$project$Bird$view, model.birds))));
+				A2(_elm_lang$core$List$concatMap, _hibiscuslabs$perlin_swarm$Bird$view, model.birds))));
 };
-var _user$project$Main$generateEther = A2(
-	_user$project$Perlin$octaves,
+var _hibiscuslabs$perlin_swarm$Main$generateEther = A2(
+	_hibiscuslabs$perlin_swarm$Perlin$octaves,
 	5,
 	_mgold$elm_random_pcg$Random_Pcg$initialSeed(227852860));
-var _user$project$Main$initModel = {
+var _hibiscuslabs$perlin_swarm$Main$initModel = {
 	birds: {ctor: '[]'},
 	width: 1000,
 	height: 800,
 	mousePosition: A2(_elm_lang$mouse$Mouse$Position, 0, 0),
-	ether: _user$project$Main$generateEther,
+	ether: _hibiscuslabs$perlin_swarm$Main$generateEther,
 	time: 0
 };
-var _user$project$Main$Model = F6(
+var _hibiscuslabs$perlin_swarm$Main$Model = F6(
 	function (a, b, c, d, e, f) {
 		return {birds: a, width: b, height: c, mousePosition: d, ether: e, time: f};
 	});
-var _user$project$Main$TickTime = function (a) {
+var _hibiscuslabs$perlin_swarm$Main$TickTime = function (a) {
 	return {ctor: 'TickTime', _0: a};
 };
-var _user$project$Main$MouseMove = function (a) {
+var _hibiscuslabs$perlin_swarm$Main$MouseMove = function (a) {
 	return {ctor: 'MouseMove', _0: a};
 };
-var _user$project$Main$NewBirdCoordinates = function (a) {
+var _hibiscuslabs$perlin_swarm$Main$NewBirdCoordinates = function (a) {
 	return {ctor: 'NewBirdCoordinates', _0: a};
 };
-var _user$project$Main$generateBirds = function (model) {
+var _hibiscuslabs$perlin_swarm$Main$generateBirds = function (model) {
 	return A2(
 		_elm_lang$core$Random$generate,
-		_user$project$Main$NewBirdCoordinates,
+		_hibiscuslabs$perlin_swarm$Main$NewBirdCoordinates,
 		A2(
 			_elm_lang$core$Random$pair,
 			A2(_elm_lang$core$Random$int, 0 - model.width, model.width),
 			A2(_elm_lang$core$Random$int, 0 - model.height, model.height)));
 };
-var _user$project$Main$init = {
+var _hibiscuslabs$perlin_swarm$Main$init = {
 	ctor: '_Tuple2',
-	_0: _user$project$Main$initModel,
-	_1: _user$project$Main$generateBirds(_user$project$Main$initModel)
+	_0: _hibiscuslabs$perlin_swarm$Main$initModel,
+	_1: _hibiscuslabs$perlin_swarm$Main$generateBirds(_hibiscuslabs$perlin_swarm$Main$initModel)
 };
-var _user$project$Main$update = F2(
+var _hibiscuslabs$perlin_swarm$Main$update = F2(
 	function (msg, model) {
 		var _p0 = msg;
 		switch (_p0.ctor) {
 			case 'Tick':
 				var newBirds = A2(
 					_elm_lang$core$List$map,
-					A5(_user$project$Bird$update, _p0._0, model.width, model.height, model.ether, model.birds),
+					A5(_hibiscuslabs$perlin_swarm$Bird$update, _p0._0, model.width, model.height, model.ether, model.birds),
 					model.birds);
 				return {
 					ctor: '_Tuple2',
@@ -13108,15 +13108,15 @@ var _user$project$Main$update = F2(
 				};
 			case 'NewBirdCoordinates':
 				var newBird = A3(
-					_user$project$Bird$init,
+					_hibiscuslabs$perlin_swarm$Bird$init,
 					_elm_lang$core$Basics$toFloat(_p0._0._0),
 					_elm_lang$core$Basics$toFloat(_p0._0._1),
 					_elm_lang$core$Native_Utils.cmp(
 						_elm_lang$core$List$length(model.birds),
-						96) > -1);
+						99) > -1);
 				var newCmd = (_elm_lang$core$Native_Utils.cmp(
 					_elm_lang$core$List$length(model.birds),
-					100) < 0) ? _user$project$Main$generateBirds(model) : _elm_lang$core$Platform_Cmd$none;
+					100) < 0) ? _hibiscuslabs$perlin_swarm$Main$generateBirds(model) : _elm_lang$core$Platform_Cmd$none;
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -13143,27 +13143,27 @@ var _user$project$Main$update = F2(
 				};
 		}
 	});
-var _user$project$Main$Tick = function (a) {
+var _hibiscuslabs$perlin_swarm$Main$Tick = function (a) {
 	return {ctor: 'Tick', _0: a};
 };
-var _user$project$Main$subscriptions = function (model) {
+var _hibiscuslabs$perlin_swarm$Main$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$batch(
 		{
 			ctor: '::',
-			_0: _elm_lang$animation_frame$AnimationFrame$diffs(_user$project$Main$Tick),
+			_0: _elm_lang$animation_frame$AnimationFrame$diffs(_hibiscuslabs$perlin_swarm$Main$Tick),
 			_1: {
 				ctor: '::',
-				_0: _elm_lang$mouse$Mouse$moves(_user$project$Main$MouseMove),
+				_0: _elm_lang$mouse$Mouse$moves(_hibiscuslabs$perlin_swarm$Main$MouseMove),
 				_1: {ctor: '[]'}
 			}
 		});
 };
-var _user$project$Main$main = _elm_lang$html$Html$program(
-	{init: _user$project$Main$init, view: _user$project$Main$view, update: _user$project$Main$update, subscriptions: _user$project$Main$subscriptions})();
+var _hibiscuslabs$perlin_swarm$Main$main = _elm_lang$html$Html$program(
+	{init: _hibiscuslabs$perlin_swarm$Main$init, view: _hibiscuslabs$perlin_swarm$Main$view, update: _hibiscuslabs$perlin_swarm$Main$update, subscriptions: _hibiscuslabs$perlin_swarm$Main$subscriptions})();
 var Elm = {};
 Elm['Main'] = Elm['Main'] || {};
-if (typeof _user$project$Main$main !== 'undefined') {
-    _user$project$Main$main(Elm['Main'], 'Main', undefined);
+if (typeof _hibiscuslabs$perlin_swarm$Main$main !== 'undefined') {
+    _hibiscuslabs$perlin_swarm$Main$main(Elm['Main'], 'Main', undefined);
 }
 
 if (typeof define === "function" && define['amd'])
